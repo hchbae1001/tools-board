@@ -7,7 +7,8 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var userRouter = require('./routes/user');
 let boardRouter = require('./routes/board');
-
+// hash 암호화
+let bcrypt = require('bcrypt');
 
 //restAPI 용 미들웨어
 var methodOverride = require('method-override');
