@@ -8,11 +8,28 @@ var indexRouter = require('./routes/index');
 var userRouter = require('./routes/user');
 let boardRouter = require('./routes/board');
 
+
 //restAPI 용 미들웨어
 var methodOverride = require('method-override');
-
+//session
+let session = require('express-session');
+const MySQLStore = require('express-mysql-session')(session);
+let options = {
+    host: 'localhost',
+    port: 3306,
+    user: 'tools',
+    password: '22110096',
+    database: 'tools'
+};
 var app = express();
 
+let sessionStore = new MySQLStore(options);
+app.use(session({
+  secret:"toolstools",
+  resave:false,
+  saveUninitialized:true,
+  store:sessionStore
+}))
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');

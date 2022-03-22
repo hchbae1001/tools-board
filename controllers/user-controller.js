@@ -1,8 +1,18 @@
 let userService = require('../services/user-service');
 
 async function loginUser(req,res){
+    const {email,password} = req.body
     try{
-
+        let data = await userService.logInUser(email);
+        let row = data[0];
+        if(row.password === password){
+            sess = req.session;
+            sess.userName = row.name;
+            sess.userId = row.id;
+            return res.redirect('/');
+        }else{
+            return res.redirect('/user')
+        }
     }catch(err){
         return res.status(500).json(err);
     }
@@ -12,8 +22,7 @@ async function getUser(req,res){
     const {id} = req.params;
     try{
         let data = await userService.getUser(id);
-        console.log(data);
-        return res.render('user/detail',{data:data});
+        return res.render('user/detail',{data:data, name:sess.userName, id:sess.userId});
     }catch(err){
         return res.status(500).json(err);
     }
@@ -22,7 +31,7 @@ async function getUser(req,res){
 async function getUsers(req,res){
     try{
         let data = await userService.getUsers();
-        return res.render('user/list',{data:data});
+        return res.render('user/list',{data:data, data:data, name:sess.userName, id:sess.userId});
     }catch(err){
         return res.status(500).json(err);
     }
@@ -41,10 +50,10 @@ async function insertUser(req,res){
 
 async function updateUser(req,res){
     const {id} = req.params;
-    const {password,phone} = req.body;
+    const {email,password,phone} = req.body;
     try{
-        await userService.updateUser(id,password,phone);
-        return res.redirect('/user/list');
+        await userService.updateUser(id,email,password,phone);
+        return res.redirect('/user/logout');
     }catch(err){
         return res.status(500).json(err);
     }
@@ -61,11 +70,8 @@ async function deleteUser(req,res){
 }
 
 async function logOutUser(req,res){
-    try{
-
-    }catch(err){
-        return res.status(500).json(err);
-    }
+    req.session.destroy();
+    return res.redirect('/');
 }
 
 module.exports ={

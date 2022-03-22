@@ -1,9 +1,10 @@
 let pool = require('../config/pool');
 let userQuery = require('../query/userQuery');
 
-async function logInUser(){
+// getUsers => admin
+async function getUsers(){
     try{
-        let data = await pool.query(userQuery.getUser,id);
+        let data = await pool.query(userQuery.getUsers);
         return data[0];
     }catch(err){
         console.log(err);
@@ -11,10 +12,9 @@ async function logInUser(){
     }
 }
 
-// getUsers => admin
-async function getUsers(){
+async function logInUser(email){
     try{
-        let data = await pool.query(userQuery.getUsers);
+        let data = await pool.query(userQuery.loginUser,email);
         return data[0];
     }catch(err){
         console.log(err);
@@ -47,9 +47,9 @@ async function insertUser(email,password,number,name,phone){
     }
 }
 //exports.updateUser = 'update user set password = ?, phone = ? where id = ?';
-async function updateUser(id,password,phone){
+async function updateUser(id,email,password,phone){
     try{
-        let data = await pool.query(userQuery.updateUser,[password,phone,id]);
+        let data = await pool.query(userQuery.updateUser,[email,password,phone,id]);
         return data[0];
     }catch(err){
         console.log(err);
