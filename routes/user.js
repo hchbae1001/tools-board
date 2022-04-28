@@ -3,15 +3,23 @@ var router = express.Router();
 let userController = require('../controllers/user-controller');
 
 
-//회원가입 폼 페이지
+//회원가입 폼 페이지 /user/create
 router.get('/create',function(req,res){
   res.render('user/insert');
 });
-
+//user List
 router.get('/',userController.getUsers);
-router.get('/:userId',userController.getUser);
+
+//user detail
+router.get('/:id',userController.getUser);
+
+//user insert
 router.post('/',userController.insertUser);
-router.patch('/:userId', userController.updateUser);
-router.delete('/:userId', userController.deleteUser);
+
+//user update
+router.patch('/:id', userController.updateUser);
+
+//user delete
+router.delete('/:id', userController.deleteUser);
 
 module.exports = router;
