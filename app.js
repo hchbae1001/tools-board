@@ -9,7 +9,8 @@ var userRouter = require('./routes/user');
 let boardRouter = require('./routes/board');
 // hash 암호화
 let bcrypt = require('bcrypt');
-
+var sequelize = require('./models').sequelize;
+// sequelize.sync();
 //restAPI 용 미들웨어
 var methodOverride = require('method-override');
 //session
